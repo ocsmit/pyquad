@@ -17,6 +17,8 @@ matplotlib = "^3.6.2"
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
 mypy = "^0.982"
+pytest = "^7.2.0"
+coverage = "^6.5.0"
 
 [tool.black]
 line-length = 80
@@ -26,7 +28,22 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pylsp-mypy]
-enabled = false
+enabled = true
 live_mode = false
 strict = true
 dmypy = true
+
+
+# Missing stub file overrides
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
+ignore_missing_imports = true
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "scipy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "rasterio.*"
+ignore_missing_imports = true
