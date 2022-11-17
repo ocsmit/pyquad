@@ -1,7 +1,7 @@
 from __future__ import annotations
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import Any, Dict, List, NewType, Tuple
+from typing import Any, Dict, List, Literal, NewType, Tuple
 
 import numpy as np
 
@@ -56,7 +56,7 @@ class BoundingBox:
         assert array.ndim == 2, "Only 2d arrays accepted"
         i, j = array.shape
         # NOTE: Array will be flipped from standard coords
-        return BoundingBox.from_list([0, j, 0, i])
+        return BoundingBox.from_list([0, int(j), 0, int(i)])
 
     def geometry(self) -> Tuple[Tuple[int | float, int | float], ...]:
         return (
@@ -95,3 +95,15 @@ class BoundingBox:
         ax.plot(
             [x1, x2, x2, x1, x1], [y1, y1, y2, y2, y1], c=c, lw=lw, **kwargs
         )
+
+    def to_int(self) -> BoundingBox:
+        self.ty = int(self.ty)
+        self.by = int(self.by)
+        self.lx = int(self.lx)
+        self.rx = int(self.rx)
+        return self
+
+    def to_ij(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+        i1, i2 = 0, int(abs(self.ty - self.by))
+        j1, j2 = 0, int(abs(self.rx - self.lx))
+        return ((i1, i2), (j1, j2))
