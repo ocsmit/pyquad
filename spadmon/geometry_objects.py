@@ -49,16 +49,44 @@ class BoundingBox:
 
     @classmethod
     def from_list(cls, point_list: List[float | int]) -> BoundingBox:
+        """Generate BoundingBox from a list of coords
+
+        Parameters
+        ----------
+        point_list : List[float | int]
+
+
+        Returns
+        -------
+        BoundingBox
+
+        """
         return BoundingBox(**dict(zip(["lx", "rx", "ty", "by"], point_list)))
 
     @classmethod
     def from_numpy(cls, array: np.ndarray[Any, Any]) -> BoundingBox:
+        """
+        Parameters
+        ----------
+        array : np.ndarray[Any, Any]
+
+        Returns
+        -------
+        BoundingBox
+
+        """
         assert array.ndim == 2, "Only 2d arrays accepted"
         i, j = array.shape
         # NOTE: Array will be flipped from standard coords
         return BoundingBox.from_list([0, int(j), 0, int(i)])
 
     def geometry(self) -> Tuple[Tuple[int | float, int | float], ...]:
+        """
+        Returns
+        -------
+            Tuple[Tuple[int | float, int | float], ...]:
+
+        """
         return (
             (self.lx, self.ty),
             (self.rx, self.ty),
@@ -67,6 +95,17 @@ class BoundingBox:
         )
 
     def contains(self, point: Point) -> bool:
+        """
+        Parameters
+        ----------
+            point : Point
+
+        Returns
+        -------
+            bool
+
+
+        """
         point_x, point_y = point.x, point.y
 
         return (
@@ -77,6 +116,12 @@ class BoundingBox:
         )
 
     def mid_point(self) -> Point:
+        """
+        Returns
+        -------
+            Point
+
+        """
         return Point((self.rx + self.lx) / 2, (self.ty + self.by) / 2)
 
     def split(self) -> TiledBoundingBox:
@@ -88,7 +133,11 @@ class BoundingBox:
         return TiledBoundingBox(nw=nw, ne=ne, se=se, sw=sw)
 
     def draw(
-        self, ax: MplAxes, c: str = "k", lw: int = 1, **kwargs: Dict[Any, Any]
+        self,
+        ax: MplAxes,
+        c: str = "k",
+        lw: int | float = 0.25,
+        **kwargs: Dict[Any, Any],
     ) -> None:
         x1, y1 = self.lx, self.ty
         x2, y2 = self.rx, self.by
