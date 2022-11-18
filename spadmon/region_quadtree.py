@@ -83,9 +83,11 @@ class RegionQuadTree:
 
         if not np.size(array):
             return False
-        var = np.var(array)
+        var = np.std(array)
         self.var = var
-        if abs(var) < 20 or self.depth > 4 or self.var == np.nan:
+        ########
+        # THREHOLDS
+        if var < 0.15 or self.depth > 7 or self.var == np.nan:
             return True
 
         if not self._divided:
