@@ -1,7 +1,11 @@
 # Change log
 
-* [`6200c4f`](https://github.com/ocsmit/spadmon/commit/6200c4f)  (HEAD -> main) Trying to get auto changelog working Fri Nov 18 12:40:28 2022 -0500
-* [`6e4bdd5`](https://github.com/ocsmit/spadmon/commit/6e4bdd5)  (origin/main, origin/HEAD) changelog update Fri Nov 18 12:36:57 2022 -0500
+* [`ded609d`](https://github.com/ocsmit/spadmon/commit/ded609d)  (HEAD -> main) Trying to get auto changelog working Fri Nov 18 12:48:46 2022 -0500
+* [`48999ea`](https://github.com/ocsmit/spadmon/commit/48999ea)  (origin/main, origin/HEAD) Trying to get auto changelog working Fri Nov 18 12:45:40 2022 -0500
+* [`4e0c076`](https://github.com/ocsmit/spadmon/commit/4e0c076)  Trying to get auto changelog working Fri Nov 18 12:42:53 2022 -0500
+* [`9c11744`](https://github.com/ocsmit/spadmon/commit/9c11744)  Trying to get auto changelog working Fri Nov 18 12:42:37 2022 -0500
+* [`ebe1ed5`](https://github.com/ocsmit/spadmon/commit/ebe1ed5)  Trying to get auto changelog working Fri Nov 18 12:40:28 2022 -0500
+* [`6e4bdd5`](https://github.com/ocsmit/spadmon/commit/6e4bdd5)  changelog update Fri Nov 18 12:36:57 2022 -0500
 * [`1d5f028`](https://github.com/ocsmit/spadmon/commit/1d5f028)  Revert changelog Fri Nov 18 12:36:29 2022 -0500
 * [`ba99f69`](https://github.com/ocsmit/spadmon/commit/ba99f69)  Exclude CHANGELOG changes from being in changelog Fri Nov 18 12:36:00 2022 -0500
 * [`b22a148`](https://github.com/ocsmit/spadmon/commit/b22a148)  Add project git-hooks Fri Nov 18 12:34:42 2022 -0500
