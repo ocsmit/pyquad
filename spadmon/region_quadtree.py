@@ -36,6 +36,19 @@ class RegionQuadTree:
         *,
         bounding_box: BoundingBox | None = None,
     ):
+        """
+        constructor for RegionQuadTree
+
+        Parameters
+        ----------
+        array : TArray2D
+            Array of 2 dimensions
+        depth : int, optional
+            Depth to assign tree node
+        bounding_box : BoundingBox | None, optional
+            BoundingBox to initialize tree with. If none provided the
+            bounding box will be generated from array
+        """
         self.bounding_box = (
             bounding_box if bounding_box else BoundingBox.from_numpy(array)
         )
@@ -54,6 +67,13 @@ class RegionQuadTree:
         self.insert(array, self.bounding_box)
 
     def divide(self) -> None:
+        """
+        Recursively subdivide node into 4 quadrants of type RegionQuadTree
+
+        Returns
+        -------
+        None
+        """
 
         shape = self.array.shape
         arr_bbox = BoundingBox.from_list(
@@ -78,6 +98,22 @@ class RegionQuadTree:
         self._divided = True
 
     def insert(self, array: TArray2D, bounding_box: BoundingBox) -> bool:
+        """
+        Insert array into either current node or children nodes
+
+        Contains logic for splitting nodes, needs to be cleaned.
+
+        Parameters
+        ----------
+        array : TArray2D
+            Array to insert
+        bounding_box : BoundingBox
+            BoundingBox of current node
+
+        Returns
+        -------
+        bool
+        """
         if self.bounding_box != bounding_box:
             return False
 
@@ -104,6 +140,20 @@ class RegionQuadTree:
     def split_array(
         array: TArray2D, tiled_bbox: TiledBoundingBox
     ) -> Tuple[TArray2D, TArray2D, TArray2D, TArray2D]:
+        """
+        Method to split array into child quadrants
+
+        Parameters
+        ----------
+        array : TArray2D
+            Array to split
+        tiled_bbox : TiledBoundingBox
+            TiledBoundingBox object with extents to split on
+
+        Returns
+        -------
+        Tuple[TArray2D, TArray2D, TArray2D, TArray2D]
+        """
         # nw = tiled_bbox.nw.to_ij()
         # nw_array = array[nw[0][0] : nw[0][1], nw[1][0] : nw[1][1]]
         # ne = tiled_bbox.ne.to_ij()
@@ -125,6 +175,13 @@ class RegionQuadTree:
         return (nw_array, ne_array, se_array, sw_array)
 
     def __str__(self) -> str:
+        """
+        Recursively represent tree for stdout
+
+        Returns
+        -------
+        str
+        """
         sp = " " * self.depth * 2
         s = f"depth={self.depth} var={self.var} {self.bounding_box}\n"
         # s += sp + ", ".join(str(point) for point in [self.depth])
@@ -144,6 +201,18 @@ class RegionQuadTree:
         )
 
     def draw(self, ax: MplAxes) -> None:
+        """
+        Helper method to plot tree nodes on a matplotlib axis
+
+
+        Parameters
+        ----------
+        ax : MplAxes
+            matplotlib axis object
+        Returns
+        -------
+        None
+        """
 
         self.bounding_box.draw(ax)
         if self._divided:
