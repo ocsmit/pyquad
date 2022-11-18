@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 set -eu
 hash='[`%h`](https://github.com/ocsmit/spadmon/commit/%h)'
-exclude="CHANGELOG.md"
+exclude=""
 
 # destination of the final changelog file
 OUTPUT_FILE=CHANGELOG.md
