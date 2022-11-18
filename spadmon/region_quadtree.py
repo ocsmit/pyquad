@@ -154,14 +154,6 @@ class RegionQuadTree:
         -------
         Tuple[TArray2D, TArray2D, TArray2D, TArray2D]
         """
-        # nw = tiled_bbox.nw.to_ij()
-        # nw_array = array[nw[0][0] : nw[0][1], nw[1][0] : nw[1][1]]
-        # ne = tiled_bbox.ne.to_ij()
-        # ne_array = array[ne[0][0] : ne[0][1], ne[1][0] : ne[1][1]]
-        # se = tiled_bbox.se.to_ij()
-        # se_array = array[se[0][0] : se[0][1], se[1][0] : se[1][1]]
-        # sw = tiled_bbox.sw.to_ij()
-        # sw_array = array[sw[0][0] : sw[0][1], sw[1][0] : sw[1][1]]
 
         nw = tiled_bbox.nw.to_int()
         nw_array = array[nw.ty : nw.by, nw.lx : nw.rx]
