@@ -7,6 +7,12 @@ OUTPUT_FILE=CHANGELOG.md
 
 # generate the changelog
 #git --no-pager log --no-merges --format="### %s%d%n>%aD%n%n>Author: %aN (%aE)%n%n>Commiter: %cN (%cE)%n%n%b%n%N%n" > $OUTPUT_FILE
+echo $res
+if [ $res == 0 ]; then
+  git add $OUTPUT_FILE
+  git commit --amend
+  echo "Populated Changelog in $OUTPUT_FILE"
+fi
 (
 echo "# Change log"
 echo
@@ -23,12 +29,6 @@ s/_/\\_/g
 '
 ) > $OUTPUT_FILE
 res=$(git status --porcelain | grep -c "./$OUTPUT_FILE$")
-echo $res
-if [ $res == 0 ]; then
-  git add $OUTPUT_FILE
-  git commit --amend
-  echo "Populated Changelog in $OUTPUT_FILE"
-fi
 
 # prevent recursion!
 # since a 'commit --amend' will trigger the post-commit script again
