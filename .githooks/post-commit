@@ -10,7 +10,7 @@ OUTPUT_FILE=CHANGELOG.md
 
 res=$(git status --porcelain | grep -c "./$OUTPUT_FILE$")
 git add $OUTPUT_FILE
-git commit --amend -C HEAD --no-verify
+git commit --amend --no-verify
 echo "Populated Changelog in $OUTPUT_FILE"
 
 # generate the changelog
