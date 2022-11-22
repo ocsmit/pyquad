@@ -24,9 +24,11 @@ s/_/\\_/g
 ) > $OUTPUT_FILE
 res=$(git status --porcelain | grep -c "./$OUTPUT_FILE$")
 echo $res
-git add $OUTPUT_FILE
-git commit --amend -C HEAD --no-verify
-echo "Populated Changelog in $OUTPUT_FILE"
+if [ $res == 0 ]; then
+  git add $OUTPUT_FILE
+  git commit --amend
+  echo "Populated Changelog in $OUTPUT_FILE"
+fi
 
 # prevent recursion!
 # since a 'commit --amend' will trigger the post-commit script again
