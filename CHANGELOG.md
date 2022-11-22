@@ -1,6 +1,6 @@
 # Change log
 
-* [`c62dbfa`](https://github.com/ocsmit/spadmon/commit/c62dbfa)  (HEAD -> main) Comment out pylint Tue Nov 22 16:33:23 2022 -0500
+* [`b1b1342`](https://github.com/ocsmit/spadmon/commit/b1b1342)  (HEAD -> main) Comment out pylint Tue Nov 22 16:33:23 2022 -0500
 * [`627e1ec`](https://github.com/ocsmit/spadmon/commit/627e1ec)  Change default line weight Tue Nov 22 16:28:32 2022 -0500
 * [`740c14f`](https://github.com/ocsmit/spadmon/commit/740c14f)  (origin/main, origin/HEAD) Fix package Tue Nov 22 16:27:52 2022 -0500
 * [`b7691b8`](https://github.com/ocsmit/spadmon/commit/b7691b8)  Clean up, documentation for region quad tree Tue Nov 22 16:26:10 2022 -0500
