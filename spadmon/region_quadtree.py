@@ -1,21 +1,33 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable
 
 import numpy as np
 from matplotlib.axes._axes import Axes as MplAxes
 
 if TYPE_CHECKING or __package__:
-    from .geometry_objects import BoundingBox, Point, TiledBoundingBox
+    from .geometry_objects import BoundingBox
 else:
-    from geometry_objects import BoundingBox, Point, TiledBoundingBox
+    from geometry_objects import BoundingBox
 
 
 CHILDREN_NAMES = ["nw", "ne", "se", "sw"]
 
+# Types
+TArray2D = np.ndarray[Any, Any]
+
 
 class RegionNode:
+    """
+    Base building block for region quadtree
+    """
+
     def __init__(
-        self, array, *, bounding_box=None, depth=0, split_func=np.std
+        self,
+        array: TArray2D,
+        *,
+        bounding_box: BoundingBox | None = None,
+        depth: int = 0,
+        split_func: Callable[[TArray2D], Any] = np.std,
     ) -> None:
         self.bounding_box = (
             bounding_box if bounding_box else BoundingBox.from_numpy(array)
@@ -29,13 +41,12 @@ class RegionNode:
         self._divided = False
         self._leaf = True
 
-        # self.insert(array, self.bounding_box)
         self.nw: RegionNode | None = None
         self.ne: RegionNode | None = None
         self.se: RegionNode | None = None
         self.sw: RegionNode | None = None
 
-    def split(self, array) -> None:
+    def split(self, array: TArray2D) -> None:
         """
         Recursively subdivide node into 4 quadrants of type RegionQuadTree
 
@@ -101,24 +112,72 @@ class RegionNode:
             ]
         )
 
+    @property
+    def leaf(self) -> bool:
+        """The leaf property."""
+        return self._leaf
+
+    @leaf.setter
+    def leaf(self, value: bool) -> None:
+        self._leaf = value
+
 
 class RegionQuadTree:
+    """
+    Interface for constructing region quadtrees
+    """
+
     def __init__(
-        self, array, *, max_depth=7, split_func=np.std, split_thresh=1
+        self,
+        array: TArray2D,
+        *,
+        max_depth: int = 7,
+        split_func: Callable[[TArray2D], Any] = np.std,
+        split_thresh: int | float = 1,
     ) -> None:
         self.max_depth = max_depth
         self.split_func = split_func
         self.split_thresh = split_thresh
         self.start(array)
 
-    def start(self, array):
+    def start(self, array: TArray2D) -> None:
+        """
+        Constructor method for RegionQuadTree
+
+        Parameters
+        ----------
+        array : TArray2D
+            2D arraylike object
+
+        Returns
+        -------
+        None
+        """
+
         # create initial root
         self.root = RegionNode(array, split_func=self.split_func)
 
         # build quadtree
         self.build(self.root, array)
 
-    def build(self, node, array):
+    def build(self, node: RegionNode, array: TArray2D) -> None:
+        """
+        Recursive function to build out tree
+
+        Contains the splitting logic which determines when to decompose each
+        new node.
+
+        Parameters
+        ----------
+        node : RegionNode
+            Self referencing parameter for recursing
+        array : TArray2D
+            2D arraylike object
+
+        Returns
+        -------
+        None
+        """
         if not node:
             return
 
@@ -139,5 +198,18 @@ class RegionQuadTree:
         for children in CHILDREN_NAMES:
             self.build(node.__dict__[children], array)
 
-    def draw(self, ax):
+    def draw(self, ax: MplAxes) -> None:
+        """
+        Visualize quadtree
+
+        Parameters
+        ----------
+        ax : MplAxes
+            MatplotLib axes object
+
+        Returns
+        -------
+        None
+        """
+
         self.root.draw(ax)
