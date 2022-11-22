@@ -1,6 +1,4 @@
 #!/bin/sh
-# Copyright (c) 2013 Martin Seeler
-# SPDX-License-Identifier: MIT
 set -eu
 hash='[`%h`](https://github.com/ocsmit/spadmon/commit/%h)'
 exclude=""
