@@ -23,6 +23,7 @@ s/_/\\_/g
 '
 ) > $OUTPUT_FILE
 res=$(git status --porcelain | grep -c "./$OUTPUT_FILE$")
+echo $res
 git add $OUTPUT_FILE
 git commit --amend -C HEAD --no-verify
 echo "Populated Changelog in $OUTPUT_FILE"
