@@ -9,7 +9,6 @@ coverage:  ## Run tests with coverage
 lint:  ## Lint and static-check
 	poetry run black spadmon --diff --line-length=80 --color 
 	poetry run mypy spadmon
-	poetry run pylint spadmon
 
 push:  ## Push code with tags
 	git push && git push --tags

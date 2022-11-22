@@ -1,7 +1,14 @@
 # Change log
 
-* [`ded609d`](https://github.com/ocsmit/spadmon/commit/ded609d)  (HEAD -> main) Trying to get auto changelog working Fri Nov 18 12:48:46 2022 -0500
-* [`48999ea`](https://github.com/ocsmit/spadmon/commit/48999ea)  (origin/main, origin/HEAD) Trying to get auto changelog working Fri Nov 18 12:45:40 2022 -0500
+* [`c62dbfa`](https://github.com/ocsmit/spadmon/commit/c62dbfa)  (HEAD -> main) Comment out pylint Tue Nov 22 16:33:23 2022 -0500
+* [`627e1ec`](https://github.com/ocsmit/spadmon/commit/627e1ec)  Change default line weight Tue Nov 22 16:28:32 2022 -0500
+* [`740c14f`](https://github.com/ocsmit/spadmon/commit/740c14f)  (origin/main, origin/HEAD) Fix package Tue Nov 22 16:27:52 2022 -0500
+* [`b7691b8`](https://github.com/ocsmit/spadmon/commit/b7691b8)  Clean up, documentation for region quad tree Tue Nov 22 16:26:10 2022 -0500
+* [`d939afb`](https://github.com/ocsmit/spadmon/commit/d939afb)  Update quadtree interface Tue Nov 22 16:04:06 2022 -0500
+* [`bb7d779`](https://github.com/ocsmit/spadmon/commit/bb7d779)  Remove commented code Fri Nov 18 15:00:01 2022 -0500
+* [`739f93a`](https://github.com/ocsmit/spadmon/commit/739f93a)  Trying to get auto changelog working Fri Nov 18 12:50:44 2022 -0500
+* [`25ee215`](https://github.com/ocsmit/spadmon/commit/25ee215)  Trying to get auto changelog working Fri Nov 18 12:48:46 2022 -0500
+* [`48999ea`](https://github.com/ocsmit/spadmon/commit/48999ea)  Trying to get auto changelog working Fri Nov 18 12:45:40 2022 -0500
 * [`4e0c076`](https://github.com/ocsmit/spadmon/commit/4e0c076)  Trying to get auto changelog working Fri Nov 18 12:42:53 2022 -0500
 * [`9c11744`](https://github.com/ocsmit/spadmon/commit/9c11744)  Trying to get auto changelog working Fri Nov 18 12:42:37 2022 -0500
 * [`ebe1ed5`](https://github.com/ocsmit/spadmon/commit/ebe1ed5)  Trying to get auto changelog working Fri Nov 18 12:40:28 2022 -0500
