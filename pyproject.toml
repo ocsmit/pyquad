@@ -15,6 +15,7 @@ gdal = "3.5.2"
 matplotlib = "^3.6.2"
 numba = "^0.56.4"
 jupyterlab = "^3.5.0"
+rich = {extras = ["jupyter"], version = "^12.6.0"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
