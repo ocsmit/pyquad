@@ -173,7 +173,7 @@ class BoundingBox:
         self,
         ax: MplAxes,
         c: str = "k",
-        lw: int | float = 0.5,
+        lw: int | float = 0.1,
         **kwargs: Dict[Any, Any],
     ) -> None:
         """
