@@ -43,7 +43,29 @@ class BoundingBox:
         Center point of bounding box
 
 
+    Class Methods
+    -------------
+    from_list(point_list: List[float | int])
+        Create BoundingBox object from list of [lx, rx, ty, by]
+    from_numpy(array: np.ndarray[Any, Any])
+        Create BoundingBox object from Numpy array
 
+    Methods
+    -------
+    geometry
+        Create geojson representation of BoundingBox
+    contains(Point)
+        Check if Point object is contained within BoundingBox
+    mid_point
+        Calculates middle coordinates of the BoundingBox
+    split -> TiledBoundingBox
+        Subdivides the BoundingBox into four equal quadrants
+    draw
+        Draws bounding box on matplotlib axis
+    to_int
+        Converts coordinates to integers. Useful for mapping to arrays
+    to_ij
+        Converts coordinates to an array index starting at [0, 0]
     """
 
     lx: int | float
