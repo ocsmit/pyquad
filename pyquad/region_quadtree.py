@@ -17,8 +17,52 @@ TArray2D = np.ndarray[Any, Any]
 
 
 class RegionNode:
-    """
-    Base building block for region quadtree
+    """Node class for region quadtree
+
+    Provides methods for decomposition, recursion, and visualizing individual nodes.
+
+    Parameters
+    ----------
+    array : TArray2D
+        Numpy array of 2 dimensions
+    bounding_box : BoundingBox | None
+        Bounding box, optional. If not specified then the bounding box is generated from `array` bounds.
+    depth : int
+        Depth of the node within the tree, optional. Default is 0.
+    split_func : Callable[[TArray2D], Any]
+        Function which computes the splitting criteria. Could be anything as long as it takes an numpy array as an argument, and returns a real number.
+
+
+    Attributes
+    ----------
+    bounding_box: BoundingBox
+        Bounding box of node
+    depth: int
+        Depth of node
+    nw
+    ne
+    se
+    sw: RegionNode | None
+        Child nodes, if None then no children
+
+    val: int | float
+        Assigned value for node
+
+    Class Attributes
+    ----------------
+    leaf: bool
+        If node is leaf or not
+
+
+    Methods
+    -------
+    split
+        Recursively subdivide node into 4 quadrants of type RegionNode
+    draw
+        Plots nodes bounding box on a matplotlib axis.
+        If the node has children nodes then it recurses until all children nodes are drawn
+
+
     """
 
     def __init__(
@@ -35,7 +79,10 @@ class RegionNode:
 
         self.depth = depth
         self.children = 0
-        self.val = self.split_criteria = split_func(array.flatten())
+        try:
+            self.val = self.split_criteria = split_func(array.flatten())
+        except ZeroDivisionError:
+            self.val = self.split_criteria = None
         self.split_func = split_func
 
         self.data: Union[None, TArray2D] = array
@@ -50,7 +97,7 @@ class RegionNode:
 
     def split(self, array: TArray2D) -> None:
         """
-        Recursively subdivide node into 4 quadrants of type RegionQuadTree
+        Recursively subdivide node into 4 quadrants of type RegionNode
 
         Returns
         -------
@@ -76,7 +123,7 @@ class RegionNode:
     def draw(
         self,
         ax: MplAxes,
-        **kwargs: Dict[Any, Any],
+        **kwargs: Dict[str, Dict[Any, Any]],
     ) -> None:
         """
         Helper method to plot tree nodes on a matplotlib axis
@@ -135,8 +182,36 @@ class RegionNode:
 
 
 class RegionQuadTree:
-    """
-    Interface for constructing region quadtrees
+    """Interface for region quadtree
+
+    Provides interface to generate full tree of RegionNodes
+
+    Parameters
+    ----------
+    array : TArray2D
+        Numpy array of 2 dimensions
+    max_depth: int
+        Maximum depth that the tree can recurse to
+    split_func : Callable[[TArray2D], Any]
+        Function which computes the splitting criteria. Could be anything as long as it takes an numpy array as an argument, and returns a real number.
+    split_thresh: int | float
+        The threhold with which to determine to continue splitting or not.
+        I.e. if split_func(A) <= split_thresh then stop recursion and make node the leaf.
+
+
+    Class Attributes
+    ----------------
+    root: RegionNode
+        Root node of tree, all other nodes will start here
+
+
+    Methods
+    -------
+    draw
+        Plots full tree on a matplotlib axis
+    traverse
+        Not Implemented
+
     """
 
     def __init__(
@@ -150,9 +225,9 @@ class RegionQuadTree:
         self.max_depth = max_depth
         self.split_func = split_func
         self.split_thresh = split_thresh
-        self.start(array)
+        self.__start(array)
 
-    def start(self, array: TArray2D) -> None:
+    def __start(self, array: TArray2D) -> None:
         """
         Constructor method for RegionQuadTree
 
@@ -170,9 +245,9 @@ class RegionQuadTree:
         self.root = RegionNode(array, split_func=self.split_func)
 
         # build quadtree
-        self.build(self.root, array)
+        self.__build(self.root, array)
 
-    def build(self, node: RegionNode, array: TArray2D) -> None:
+    def __build(self, node: RegionNode, array: TArray2D) -> None:
         """
         Recursive function to build out tree
 
@@ -213,7 +288,7 @@ class RegionQuadTree:
         node.split(array)
 
         for children in CHILDREN_NAMES:
-            self.build(node.__dict__[children], array)
+            self.__build(node.__dict__[children], array)
 
     def draw(
         self,
