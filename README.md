@@ -3,7 +3,7 @@
 ---
 
 
-`pyquad` is a python library for generating quadtrees.
+`pyquad` is a python library for generating quadtrees - note: a bit messy and not at all optimized.
 A focus is placed on region quadtrees as future use/development will be geared towards remote sensing based algorithms.
 
 A demo can be found within the notebooks folder.
