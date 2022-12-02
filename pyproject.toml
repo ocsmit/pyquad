@@ -36,6 +36,8 @@ live_mode = false
 strict = true
 dmypy = true
 
+[tool.poetry2conda]
+name = "pyquad"
 
 # Missing stub file overrides
 [[tool.mypy.overrides]]
@@ -50,3 +52,5 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "rasterio.*"
 ignore_missing_imports = true
+
+
