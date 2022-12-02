@@ -16,3 +16,6 @@ push:  ## Push code with tags
 test:  ## Run tests
 	poetry run pytest -ra
 
+
+conda:
+	poetry2conda pyproject.toml environment.yml
