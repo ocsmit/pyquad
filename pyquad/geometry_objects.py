@@ -1,11 +1,15 @@
+"""geometry objects."""
+
 from __future__ import annotations
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import Any, Dict, List, Literal, NewType, Tuple
 
 import numpy as np
 
+import matplotlib.pyplot as plt
+from matplotlib.collections import PolyCollection
 from matplotlib.axes._axes import Axes as MplAxes
+
 
 ###############################################################################
 # Points
@@ -14,6 +18,9 @@ class Point:
     x: int | float
     y: int | float
     value: int | float = 0
+
+    def as_arr(self):
+        return self.x, self.y
 
 
 ###############################################################################
@@ -24,7 +31,7 @@ TiledBoundingBox = namedtuple("TiledBoundingBox", ["nw", "ne", "se", "sw"])
 @dataclass
 class BoundingBox:
     """
-    Generic object to represent a bounding box with associated helper functions
+    Generic object to represent a bounding box with associated helper functions.
 
     Parameters
     ----------
@@ -86,7 +93,7 @@ class BoundingBox:
     @classmethod
     def from_list(cls, point_list: List[float | int]) -> BoundingBox:
         """
-        Create BoundingBox object from list of bounds
+        Create BoundingBox object from list of bounds.
 
         Parameters
         ----------
@@ -102,7 +109,7 @@ class BoundingBox:
     @classmethod
     def from_numpy(cls, array: np.ndarray[Any, Any]) -> BoundingBox:
         """
-        Create BoundingBox object from Numpy array
+        Create BoundingBox object from Numpy array.
 
         Following array notation, the extent values will be rotated so that
         0,0 is at the top left and maximum exent will be at bottom right.
@@ -124,7 +131,7 @@ class BoundingBox:
 
     def geometry(self) -> Tuple[Tuple[int | float, int | float], ...]:
         """
-        Get full geometry coordinate tuple
+        Get full geometry coordinate tuple.
 
         Returns
         -------
@@ -140,7 +147,7 @@ class BoundingBox:
 
     def contains(self, point: Point) -> bool:
         """
-        Check if point is within boundingbox
+        Check if point is within boundingbox.
 
         Parameters
         ----------
@@ -163,7 +170,7 @@ class BoundingBox:
 
     def mid_point(self) -> Point:
         """
-        Calculate midpoint of BoundingBox
+        Calculate midpoint of BoundingBox.
 
         Returns
         -------
@@ -174,7 +181,7 @@ class BoundingBox:
 
     def split(self) -> TiledBoundingBox:
         """
-        Splits BoundingBox into 4 equal sized quadrants
+        Split BoundingBox into 4 equal sized quadrants.
 
         The returned object is a TiledBoundingBox object acting as a wrapper
         for the nw, ne, se, and sw BoundingBox's
@@ -196,11 +203,12 @@ class BoundingBox:
         ax: MplAxes,
         c: str = "k",
         lw: int | float = 0.1,
+        depth=0,
+        fill_val=True,
         **kwargs: Dict[Any, Any],
     ) -> None:
         """
-        Helper method to plot BoundingBox on a matplotlib axis
-
+        Plot BoundingBox on a matplotlib axis.
 
         Parameters
         ----------
@@ -217,15 +225,36 @@ class BoundingBox:
         -------
         None
         """
+        if depth == np.nan:
+            return
         x1, y1 = self.lx, self.ty
         x2, y2 = self.rx, self.by
-        ax.plot(
-            [x1, x2, x2, x1, x1], [y1, y1, y2, y2, y1], c=c, lw=lw, **kwargs
-        )
+        # ax.plot(
+        #     [x1, x2, x2, x1, x1], [y1, y1, y2, y2, y1], c=c, lw=lw, **kwargs
+        # )
+
+        x = [x1, x2, x2, x1]
+        y = [y1, y1, y2, y2]
+        cmap = plt.cm.viridis
+
+        norm = plt.Normalize(0.005, 0.6)
+        color = cmap(norm(depth))
+        if fill_val:
+            vertices = [list(zip(x, y))]
+            poly = PolyCollection(
+                vertices, color=color, rasterized=False, lw=0, **kwargs
+            )
+            ax.add_collection(poly)
+        else:
+            ax.plot(
+                [x1, x2, x2, x1, x1],
+                [y1, y1, y2, y2, y1],
+                **kwargs,
+            )
 
     def to_int(self) -> BoundingBox:
         """
-        Enforce integer type for coordinates
+        Enforce integer type for coordinates.
 
         convenience method designed primarily for indexing arrays
 
@@ -242,7 +271,7 @@ class BoundingBox:
 
     def to_ij(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
         """
-        Converts x, y coords to i, j coords for matix indexing
+        Convert x, y coords to i, j coords for matix indexing.
 
         Returns
         -------

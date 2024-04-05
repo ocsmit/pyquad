@@ -1,8 +1,10 @@
 from __future__ import annotations
 from typing import Any, Callable, Dict, TYPE_CHECKING, Union
 
+import matplotlib.pyplot as plt
 from matplotlib.axes._axes import Axes as MplAxes
 import numpy as np
+from math import log
 
 if TYPE_CHECKING or __package__:
     from .geometry_objects import BoundingBox
@@ -17,7 +19,7 @@ TArray2D = np.ndarray[Any, Any]
 
 
 class RegionNode:
-    """Node class for region quadtree
+    """Node class for region quadtree.
 
     Provides methods for decomposition, recursion, and visualizing individual nodes.
 
@@ -86,6 +88,7 @@ class RegionNode:
         self.split_func = split_func
 
         self.data: Union[None, TArray2D] = array
+        self.rep_val = np.mean(array)
 
         self._divided = False
         self._leaf = True
@@ -97,17 +100,15 @@ class RegionNode:
 
     def split(self, array: TArray2D) -> None:
         """
-        Recursively subdivide node into 4 quadrants of type RegionNode
+        Recursively subdivide node into 4 quadrants of type RegionNode.
 
         Returns
         -------
         None
         """
-
         depth = self.depth + 1
         split_bbox = self.bounding_box.split()
         for children in CHILDREN_NAMES:
-
             bbox = getattr(split_bbox, children).to_int()
             self.__dict__[children] = RegionNode(
                 array[bbox.ty : bbox.by, bbox.lx : bbox.rx],
@@ -126,7 +127,7 @@ class RegionNode:
         **kwargs: Dict[str, Dict[Any, Any]],
     ) -> None:
         """
-        Helper method to plot tree nodes on a matplotlib axis
+        Plot tree nodes on a matplotlib axis.
 
 
         Parameters
@@ -137,13 +138,26 @@ class RegionNode:
         -------
         None
         """
-
-        self.bounding_box.draw(ax, **kwargs)
         if self._divided:
             self.nw.draw(ax, **kwargs) if self.nw else None
             self.ne.draw(ax, **kwargs) if self.ne else None
             self.se.draw(ax, **kwargs) if self.se else None
             self.sw.draw(ax, **kwargs) if self.sw else None
+        else:
+            self.bounding_box.draw(ax, depth=self.rep_val, **kwargs)
+
+    def get_leafs(self):
+        if self._leaf:
+            bb = self.bounding_box.mid_point().as_arr()
+            bg = self.bounding_box
+            print(
+                f"{self.depth}, {bb[0]}, {bb[1]}, {self.rep_val}, {np.var(self.data)}, {self.val}, {bg.lx}, {bg.rx}, {bg.ty}, {bg.by}"
+            )
+            return self.bounding_box.mid_point().as_arr()
+        self.nw.get_leafs()
+        self.ne.get_leafs()
+        self.se.get_leafs()
+        self.sw.get_leafs()
 
     def __str__(self) -> str:
         """
@@ -182,7 +196,7 @@ class RegionNode:
 
 
 class RegionQuadTree:
-    """Interface for region quadtree
+    """Interface for region quadtree.
 
     Provides interface to generate full tree of RegionNodes
 
@@ -222,6 +236,16 @@ class RegionQuadTree:
         split_func: Callable[[TArray2D], Any] = np.std,
         split_thresh: int | float = 1,
     ) -> None:
+        assert len(array.shape) == 2, "Only accepts 2d arrays atm"
+        n = array.shape[0]
+
+        max_possible_depth = int(log(n) // log(2))
+        if max_depth is None or max_possible_depth < max_depth:
+            print(
+                f"max depth set to maximum possible depth of data ({max_possible_depth})"
+            )
+            max_depth = max_possible_depth
+
         self.max_depth = max_depth
         self.split_func = split_func
         self.split_thresh = split_thresh
@@ -229,7 +253,7 @@ class RegionQuadTree:
 
     def __start(self, array: TArray2D) -> None:
         """
-        Constructor method for RegionQuadTree
+        Construct region quadtree.
 
         Parameters
         ----------
@@ -240,7 +264,6 @@ class RegionQuadTree:
         -------
         None
         """
-
         # create initial root
         self.root = RegionNode(array, split_func=self.split_func)
 
@@ -249,7 +272,7 @@ class RegionQuadTree:
 
     def __build(self, node: RegionNode, array: TArray2D) -> None:
         """
-        Recursive function to build out tree
+        Recursive function to build out tree.
 
         Contains the splitting logic which determines when to decompose each
         new node.
@@ -272,10 +295,7 @@ class RegionQuadTree:
         if node.depth == 0:
             node.split(array)
 
-        if (
-            node.depth >= self.max_depth
-            or node.split_criteria <= self.split_thresh
-        ):
+        if node.depth >= self.max_depth or node.split_criteria <= self.split_thresh:
             if node.depth > self.max_depth:
                 self.max_depth = node.depth
 
@@ -296,7 +316,7 @@ class RegionQuadTree:
         **kwargs: Dict[Any, Any],
     ) -> None:
         """
-        Visualize quadtree
+        Visualize quadtree.
 
         Parameters
         ----------
@@ -307,5 +327,6 @@ class RegionQuadTree:
         -------
         None
         """
+        norm = plt.Normalize(-1, 1)
 
-        self.root.draw(ax, **kwargs)
+        self.root.draw(ax, norm=norm, **kwargs)
